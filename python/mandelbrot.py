@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     img_array_shape = (*z_matrix.shape, 3)
     max_val = np.nanmax(z_matrix)
-    z_matrix_normalized = z_matrix / max
+    z_matrix_normalized = z_matrix / max_val
 
     w, h = 1024, 1024
     max_iterations = 300
