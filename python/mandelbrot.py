@@ -7,9 +7,8 @@ def mandelbrot_core_fn(z, c):
 
 
 def get_pixel_values(z_mtrx):
-    
-    return
 
+    return
 
 
 if __name__ == "__main__":
@@ -26,21 +25,11 @@ if __name__ == "__main__":
     num_iterations = 10
     for i in range(num_iterations):
         z_matrix = mandelbrot_core_fn(z_matrix, c_matrix)
-    bool_mtrx = np.isfinite(z_matrix)
+    max_val = np.nanmax(z_matrix)
+    z_matrix = np.where(np.isfinite(z_matrix), z_matrix, max_val)
 
     img_array_shape = (*z_matrix.shape, 3)
-    max_val = np.nanmax(z_matrix)
     z_matrix_normalized = z_matrix / max_val
-
-    w, h = 1024, 1024
-    max_iterations = 300
-    t = (w, h, 3)
-    A = np.full(t, 255, dtype=np.uint8)
-    for i in range(-512, 512):
-        for j in range(-512, 512):
-            c = complex(float(i) / 256, float(j) / 256)
-            tupl = tuple([get_pixel_values(c, max_iterations) for _ in range(3)])
-            A[i + 512, j + 512] = tupl
-            # A[i + 512, j + 512] = (255, 0, 0)
-    img = Image.fromarray(A, "RGB")
+    img_array = np.array([np.full(3, np.uint8(255.0 * val)) for val in z_matrix_normalized.flatten()]).reshape(img_array_shape)
+    img = Image.fromarray(img_array, "RGB")
     img.save("mandelbrot.png")
