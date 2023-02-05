@@ -16,20 +16,24 @@ if __name__ == "__main__":
     img_shape = (img_size, img_size)
     c_matrix = np.array(
         [
-            complex(real, imag) / (2 * img_size)
-            for real in range(-1 * (img_size / 2), (img_size / 2))
-            for imag in range(-1 * (img_size / 2), (img_size / 2))
+            2 * complex(real, imag) / img_size
+            for real in range(-1 * (img_size // 2), (img_size // 2))
+            for imag in range(-1 * (img_size // 2), (img_size // 2))
         ]
     ).reshape(img_shape)
-    z_matrix = np.zeros(img_shape)
+    z_matrix = np.zeros(img_shape, dtype=complex)
     num_iterations = 10
     for i in range(num_iterations):
         z_matrix = mandelbrot_core_fn(z_matrix, c_matrix)
-    max_val = np.nanmax(z_matrix)
-    z_matrix = np.where(np.isfinite(z_matrix), z_matrix, max_val)
-
-    img_array_shape = (*z_matrix.shape, 3)
-    z_matrix_normalized = z_matrix / max_val
-    img_array = np.array([np.full(3, np.uint8(255.0 * val)) for val in z_matrix_normalized.flatten()]).reshape(img_array_shape)
-    img = Image.fromarray(img_array, "RGB")
-    img.save("mandelbrot.png")
+    print(z_matrix.shape)
+    z_matrix_abs = np.absolute(z_matrix)
+    max_val = np.nanmax(z_matrix_abs)
+    z_norm = z_matrix_abs / max_val
+    print(z_norm.shape)
+    pixel_brightness = z_norm * 255
+    pixel_brightness = pixel_brightness.astype('uint8')
+    print(pixel_brightness)
+    brightness_map = np.stack([pixel_brightness for _ in range(3)], axis=2)
+    print(brightness_map.shape)
+    img = Image.fromarray(brightness_map, "RGB")
+    img.show("mandelbrot.png")
