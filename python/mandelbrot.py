@@ -55,8 +55,9 @@ def main():
 
     color_map = np.rint(step_count_mtrx * scale).astype(dtype=int).flatten()
 
-    
-    img_arr = [rgb_gradient[idx if idx < num_colors else num_colors - 1] for idx in color_map]
+    img_arr = [
+        rgb_gradient[idx if idx < num_colors else num_colors - 1] for idx in color_map
+    ]
     img_arr = np.array(img_arr).reshape((*img_shape, 3))
 
     img = Image.fromarray(img_arr, "RGB")
