@@ -6,7 +6,6 @@ import numpy as np
 
 # the entire set is inside a circle with r=2, i.e. r**2=4
 MAX_DISTANCE = 2
-MAX_SQR = MAX_DISTANCE**2
 
 
 def mandelbrot_core_fn(z, c):
